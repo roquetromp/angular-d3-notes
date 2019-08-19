@@ -1,0 +1,5 @@
+<form [formGroup]="configForm" (ngSubmit)="submitDomain()" >
+    <input type="number" formControlName="lowerBound" min="0">
+    <input type="number" formControlName="upperBound" min="0">
+    <input type="submit" value="Submit">
+</form>

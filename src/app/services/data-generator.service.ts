@@ -14,7 +14,7 @@ export class DataGeneratorService {
       x: 0,
       y: 0
     }, {
-      x: 10,
+      x: 60,
       y: 10
     }];
   }

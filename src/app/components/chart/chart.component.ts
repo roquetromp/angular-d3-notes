@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, OnChanges, HostListener } from '@angular/core';
 import { CanvasDimensions } from '../../models/canvas-dimensions.model';
 import { DataPoint } from '../../models/data-points.model';
 import { TimeRange } from '../../models/time-range.model';
 import { ValueRange } from '../../models/value-range.model';
-import { select, scaleLinear, axisBottom, axisLeft, line } from 'd3';
+import { select, scaleLinear, axisBottom, axisLeft, line, svg, timeMinute } from 'd3';
 import { Selection } from 'd3-selection'
 import { Margin } from '../../models/margin.model';
 
@@ -13,10 +13,10 @@ import { Margin } from '../../models/margin.model';
   styleUrls: ['./chart.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnChanges {
   @Input() canvasDimensions: CanvasDimensions = {
-    height: 500,
-    width: 500,
+    height: window.innerHeight - 200,
+    width: window.innerWidth - 200,
   };
 
   @Input() margin: Margin = {
@@ -25,16 +25,40 @@ export class ChartComponent implements OnInit {
     left: 50,
     right: 50
   };
+
   @Input() dataPoints: DataPoint[];
   @Input() timeRange: TimeRange;
   @Input() valueRange: ValueRange;
+
+  @Input() xDomain: number[];
+  @Input() yDomain: number[] = [10, 0];
+
   canvas: Selection<any, any, HTMLElement, DataPoint>
   xScale: any;
   yScale: any;
 
   constructor() { }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.canvasDimensions.width = event.target.innerWidth - 200;
+    this.canvasDimensions.height = event.target.innerHeight - 200;
+    this.canvas.remove();
+    this.drawChart();
+  }
+
   ngOnInit() {
+    this.drawChart();
+  }
+
+  ngOnChanges() {
+    if (this.canvas) {
+      this.canvas.remove();
+      this.drawChart();
+    }
+  }
+
+  private drawChart() {
     this.initCanvas();
     this.initScale();
     this.initAxis();
@@ -49,24 +73,30 @@ export class ChartComponent implements OnInit {
 
   }
   private initAxis() {
-    const xAxis = axisBottom(this.xScale);
-    const yAxis = axisLeft(this.yScale);
+    const xAxis = axisBottom(this.xScale)
+      .ticks(30)
+      .tickSizeInner(-this.canvasDimensions.height)
+      .tickPadding(10)
+      .tickFormat(d=> `:${d.valueOf()}`)
+
+    const yAxis = axisLeft(this.yScale).tickSizeInner(-this.canvasDimensions.width);
 
     this.canvas.append('g')
+      .attr('class', 'axis x')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top + this.canvasDimensions.height})`)
       .call(xAxis);
 
     this.canvas.append('g')
+      .attr('class', 'axis y')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
       .call(yAxis);
 
   }
   private initScale() {
-    this.xScale = scaleLinear().range([0, this.canvasDimensions.width]).domain([0, 10]);
-    this.yScale = scaleLinear().range([0, this.canvasDimensions.height]).domain([10, 0]);
+    this.xScale = scaleLinear().range([0, this.canvasDimensions.width]).domain(this.xDomain);
+    this.yScale = scaleLinear().range([0, this.canvasDimensions.height]).domain(this.yDomain);
   }
   private updateGraph() {
-
     const dataLine = line<DataPoint>()
       .x(d => this.xScale(d.x))
       .y(d => this.yScale(d.y));

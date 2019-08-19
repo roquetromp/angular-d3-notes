@@ -1,1 +1,5 @@
-<app-chart [dataPoints]="dataPoints"></app-chart>
+<app-chart [dataPoints]="dataPoints" [xDomain]="xDomain"></app-chart>
+xDomain : {{ xDomain | json }}
+<app-chart-configuration 
+    (onDomainSubmit)="onDomainSubmit($event)">
+</app-chart-configuration>
