@@ -12,10 +12,13 @@ export class DataGeneratorService {
 
     return [{
       x: 0,
-      y: 0
+      y: 'A'
     }, {
+      x: 30,
+      y: 'C'
+    },{
       x: 60,
-      y: 10
+      y: 'F'
     }];
   }
 }

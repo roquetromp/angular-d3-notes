@@ -1,25 +1,56 @@
+$thick-stroke-color: grey;
+$thin-stroke-color: lightgrey;
+$line-stroke-color:red;
+
+$line-stroke-width: 3;
+$thick-stroke-width: 5;
+$thin-stroke-width: 1;
+
+$tick-font-size:2em;
+
+
 .chart {
     svg {
         border:thin black solid;
     }
 }
 
-.x {
-    .tick:nth-of-type(5n + 1) {
+.y{ 
+    .tick {
         line {
-            stroke: darkgray;
-            stroke-width: 5;
+            stroke: grey;
+            stroke-width: 0
         }
 
         text {
-            font-size: 2em;
+            font-size: $tick-font-size;
+        }
+    }
+
+    .tick:last-of-type {
+        line {
+            opacity: 0;
+        }
+
+    }
+}
+
+.x {
+    .tick:nth-of-type(5n + 1) {
+        line {
+            stroke: $thick-stroke-color;
+            stroke-width: $thick-stroke-width;
+        }
+
+        text {
+            font-size: $tick-font-size;
         }
     }
 
     .tick:not(:nth-of-type(5n + 1)) {
         line {
-            stroke: grey;
-            stroke-width: 1;
+            stroke: $thin-stroke-color;
+            stroke-width: $thin-stroke-width;
         }
         text {
             opacity: 0;

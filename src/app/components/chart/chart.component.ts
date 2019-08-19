@@ -3,7 +3,7 @@ import { CanvasDimensions } from '../../models/canvas-dimensions.model';
 import { DataPoint } from '../../models/data-points.model';
 import { TimeRange } from '../../models/time-range.model';
 import { ValueRange } from '../../models/value-range.model';
-import { select, scaleLinear, axisBottom, axisLeft, line, svg, timeMinute } from 'd3';
+import { select, scaleLinear, axisBottom, axisLeft, line, svg, timeMinute, scaleBand, scalePoint } from 'd3';
 import { Selection } from 'd3-selection'
 import { Margin } from '../../models/margin.model';
 
@@ -31,7 +31,7 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() valueRange: ValueRange;
 
   @Input() xDomain: number[];
-  @Input() yDomain: number[] = [10, 0];
+  @Input() yDomain: string[] = "A B C D E F".split(" ").reverse();
 
   canvas: Selection<any, any, HTMLElement, DataPoint>
   xScale: any;
@@ -79,7 +79,9 @@ export class ChartComponent implements OnInit, OnChanges {
       .tickPadding(10)
       .tickFormat(d=> `:${d.valueOf()}`)
 
-    const yAxis = axisLeft(this.yScale).tickSizeInner(-this.canvasDimensions.width);
+    const yAxis = axisLeft(this.yScale)
+    .tickSizeInner(-this.canvasDimensions.width)
+    .tickPadding(10);
 
     this.canvas.append('g')
       .attr('class', 'axis x')
@@ -94,7 +96,7 @@ export class ChartComponent implements OnInit, OnChanges {
   }
   private initScale() {
     this.xScale = scaleLinear().range([0, this.canvasDimensions.width]).domain(this.xDomain);
-    this.yScale = scaleLinear().range([0, this.canvasDimensions.height]).domain(this.yDomain);
+    this.yScale = scalePoint().range([0, this.canvasDimensions.height]).domain(this.yDomain);
   }
   private updateGraph() {
     const dataLine = line<DataPoint>()
@@ -106,6 +108,7 @@ export class ChartComponent implements OnInit, OnChanges {
       .append('path')
       .attr('d', dataLine(this.dataPoints))
       .attr('stroke', 'red')
+      .attr('fill', 'none')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
   }
 
