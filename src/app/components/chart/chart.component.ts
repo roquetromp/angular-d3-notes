@@ -3,7 +3,7 @@ import { CanvasDimensions } from '../../models/canvas-dimensions.model';
 import { DataPoint } from '../../models/data-points.model';
 import { TimeRange } from '../../models/time-range.model';
 import { ValueRange } from '../../models/value-range.model';
-import { select, scaleLinear, axisBottom, axisLeft, line, svg, timeMinute, scaleBand, scalePoint } from 'd3';
+import { select, scaleLinear, axisBottom, axisLeft, line, svg, timeMinute, scaleBand, scalePoint, scaleOrdinal } from 'd3';
 import { Selection } from 'd3-selection'
 import { Margin } from '../../models/margin.model';
 
@@ -22,7 +22,7 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() margin: Margin = {
     top: 30,
     bottom: 30,
-    left: 50,
+    left: 100,
     right: 50
   };
 
@@ -39,13 +39,13 @@ export class ChartComponent implements OnInit, OnChanges {
 
   constructor() { }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.canvasDimensions.width = event.target.innerWidth - 200;
-    this.canvasDimensions.height = event.target.innerHeight - 200;
-    this.canvas.remove();
-    this.drawChart();
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event) {
+  //   this.canvasDimensions.width = event.target.innerWidth - 200;
+  //   this.canvasDimensions.height = event.target.innerHeight - 200;
+  //   this.canvas.remove();
+  //   this.drawChart();
+  // }
 
   ngOnInit() {
     this.drawChart();
@@ -81,7 +81,8 @@ export class ChartComponent implements OnInit, OnChanges {
 
     const yAxis = axisLeft(this.yScale)
     .tickSizeInner(-this.canvasDimensions.width)
-    .tickPadding(10);
+    .tickPadding(10)
+    .tickFormat(d => `${Math.round(this.yScale(d))} -> ${d}`)
 
     this.canvas.append('g')
       .attr('class', 'axis x')
@@ -96,7 +97,8 @@ export class ChartComponent implements OnInit, OnChanges {
   }
   private initScale() {
     this.xScale = scaleLinear().range([0, this.canvasDimensions.width]).domain(this.xDomain);
-    this.yScale = scalePoint().range([0, this.canvasDimensions.height]).domain(this.yDomain);
+    // this.yScale = scalePoint().range([0, this.canvasDimensions.height]).domain(this.yDomain);
+    this.yScale = scaleOrdinal(this.manualScaleRange(this.yDomain)).domain(this.yDomain);
   }
   private updateGraph() {
     const dataLine = line<DataPoint>()
@@ -110,6 +112,40 @@ export class ChartComponent implements OnInit, OnChanges {
       .attr('stroke', 'red')
       .attr('fill', 'none')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
+  }
+
+  private manualScaleRange(domain: String []) {
+    // Relative distance to the next domain tick
+    const yDomainRelativeDistance = [{
+      value: 'A',
+      relDistance: 0
+    }, {
+      value:'B',
+      relDistance: 1,
+    }, {
+      value: 'C',
+      relDistance: 3
+    }, {
+      value:'D',
+      relDistance: 4
+    }, {
+      value: 'E',
+      relDistance: 4
+    }, {
+      value: 'F',
+      relDistance: 1
+    }];
+
+    const totalDistance = yDomainRelativeDistance.reduce((acc, curr) => acc + curr.relDistance, 0)
+    const pointStep = this.canvasDimensions.height / totalDistance;
+    return yDomainRelativeDistance.reduce((acc, curr, i) => {
+      return [...acc, {
+        value: curr.value, 
+        relDistance: curr.relDistance + (i > 0 ? acc[i - 1].relDistance : 0)
+      }]
+    }, [])
+    .map((value, index) => value.relDistance * pointStep);
+    
   }
 
 
