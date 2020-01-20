@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { ChartContainerComponent } from './components/chart-container/chart-container.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { ChartConfigurationComponent } from './components/chart-configuration/chart-configuration.component';
+import { DataJoinContainerComponent } from './components/data-join-container/data-join-container.component';
+import { DataJoinComponent } from './components/data-join/data-join.component';
 
 
 @NgModule({
@@ -14,7 +16,9 @@ import { ChartConfigurationComponent } from './components/chart-configuration/ch
     AppComponent,
     ChartContainerComponent,
     ChartComponent,
-    ChartConfigurationComponent
+    ChartConfigurationComponent,
+    DataJoinContainerComponent,
+    DataJoinComponent
   ],
   imports: [
     BrowserModule,
