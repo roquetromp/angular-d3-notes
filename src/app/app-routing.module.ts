@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ChartContainerComponent } from './components/chart-container/chart-container.component';
-import { DataJoinContainerComponent } from './components/data-join-container/data-join-container.component';
+import { ChartContainerComponent } from './components/containers/chart-container/chart-container.component';
+import { DataJoinContainerComponent } from './components/containers/data-join-container/data-join-container.component';
 
 
 const routes: Routes = [{

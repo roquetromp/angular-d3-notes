@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DataPoint } from '../../models/data-points.model';
-import { DataGeneratorService } from '../../services/data-generator.service';
-import { Domain } from '../chart-configuration/chart-configuration.component';
+import { DataPoint } from '../../../models/data-points.model';
+import { DataGeneratorService } from '../../../services/data-generator.service';
+import { Domain } from '../../chart-configuration/chart-configuration.component';
 
 @Component({
   selector: 'app-chart-container',

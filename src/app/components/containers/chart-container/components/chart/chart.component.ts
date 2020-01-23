@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation, Input, OnChanges, HostListener } from '@angular/core';
-import { CanvasDimensions } from '../../models/canvas-dimensions.model';
-import { DataPoint } from '../../models/data-points.model';
-import { TimeRange } from '../../models/time-range.model';
-import { ValueRange } from '../../models/value-range.model';
+import { CanvasDimensions } from '../../../../../models/canvas-dimensions.model';
+import { DataPoint } from '../../../../../models/data-points.model';
+import { TimeRange } from '../../../../../models/time-range.model';
+import { ValueRange } from '../../../../../models/value-range.model';
 import { select, scaleLinear, axisBottom, axisLeft, line, svg, timeMinute, scaleBand, scalePoint } from 'd3';
 import { Selection } from 'd3-selection'
-import { Margin } from '../../models/margin.model';
+import { Margin } from '../../../../../models/margin.model';
 
 @Component({
   selector: 'app-chart',

@@ -58,7 +58,7 @@ export class DataJoinComponent implements OnInit {
       .data([this.data])
       .join('path')
       .attr('class', 'path-line')
-      .attr('d', d=> lineGenerator(d))
+      .attr('d', d=> lineGenerator(d));
 
 
     group
