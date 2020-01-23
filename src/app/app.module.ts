@@ -18,14 +18,12 @@ import { DataJoinComponent } from './components/data-join/data-join.component';
     ChartComponent,
     ChartConfigurationComponent,
     DataJoinContainerComponent,
-    DataJoinComponent
+    DataJoinComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule
-
-
   ],
   providers: [],
   bootstrap: [AppComponent]

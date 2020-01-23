@@ -1,2 +1,12 @@
-<svg id="data-join-example"></svg>
-<button role="button" (click)="addDataPoint()">Add DataPoint + 1</button>
+<div class="graph-sample" #lineContainer>
+  <svg id="data-join-example"></svg>
+</div>
+<div class="options">
+  <button role="button" (click)="setEditMode('add')" [ngClass]="{ 'toggle-on': editMode === 'add'}" [disabled]="editMode === 'add'">Enter</button>
+  <button role="button" (click)="setEditMode('update')" [ngClass]="{ 'toggle-on': editMode === 'update'}" [disabled]="editMode === 'update'">Update</button>
+  <button role="button" (click)="setEditMode('remove')" [ngClass]="{ 'toggle-on': editMode === 'remove'}" [disabled]="editMode === 'remove'">Exit</button>
+</div>
+<aside>
+  <h2>Data</h2>
+  <pre>{{ data | json}}</pre>
+</aside>

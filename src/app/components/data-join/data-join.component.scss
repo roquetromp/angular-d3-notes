@@ -1,0 +1,45 @@
+::ng-deep {
+  .graph-sample {
+    width: 1000px;
+
+  }
+
+  .toggle-on {
+    background-color: darkgray;
+  }
+
+
+  .path-line {
+    fill: none;
+    stroke: black;
+    stroke-linecap: round;
+    stroke-width: 2px;
+    stroke-opacity: 1;
+  }
+
+  .point {
+    fill: blue;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--updated {
+      fill: greenyellow;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &--removed {
+      fill: red;
+    }
+  }
+
+}
+
+svg {
+  border: thin solid black;
+}
+
+

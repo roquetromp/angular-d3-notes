@@ -7,7 +7,7 @@ import { DataJoinContainerComponent } from './components/data-join-container/dat
 const routes: Routes = [{
   path: '',
   pathMatch: 'full',
-  redirectTo: '/chart'
+  redirectTo: '/data-join'
 }, {
   path: 'chart',
   component: ChartContainerComponent
